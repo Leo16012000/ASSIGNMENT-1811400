@@ -1,9 +1,9 @@
 ﻿/*
 * 	Bai tap lon Do Hoa May Tinh
-*	So dinh tren hinh tron: 36
-*	Ten: 	Nguyen Xuan Hien
-* 	MSSV:	1652192
-* 	Lop:	L02
+*	So dinh tren hinh tron: 
+*	Ten: 	Dang Tuan Anh
+* 	MSSV:	1811400
+* 	Lop:	L01
 */
 
 #include <math.h>
@@ -308,8 +308,10 @@ public:
 	//// Lab 2
 	void CreateTetrahedron();
 	void CreateCube(float	fSize);
-	// Lab 3
+	void CreateCuboid(float fSizeX, float fSizeY, float fSizeZ);
 	void CreateCylinder(int N, float base1Height, float base1Radius);
+
+	void BTCuboid(float fSizeX, float fSizeY, float fSizeZ, float fCutSizeT);
 	// Lab 5
 	void CalculateFacesNorm();
 	void Draw();
@@ -342,6 +344,22 @@ void Mesh::DrawWireframe()
 		{
 			int iv = face[f].vert[v].vertIndex;
 
+			glVertex3f(pt[iv].x, pt[iv].y, pt[iv].z);
+		}
+		glEnd();
+	}
+}
+
+// To mau cho doi tuong (Lab 5)
+void Mesh::Draw()
+{
+	for (int f = 0; f < numFaces; f++)
+	{
+		glBegin(GL_POLYGON);
+		for (int v = 0; v < face[f].nVerts; v++)
+		{
+			int iv = face[f].vert[v].vertIndex;
+			glNormal3f(face[f].facenorm.x, face[f].facenorm.y, face[f].facenorm.z);
 			glVertex3f(pt[iv].x, pt[iv].y, pt[iv].z);
 		}
 		glEnd();
@@ -396,22 +414,6 @@ void Mesh::CalculateFacesNorm()
 		}
 		face[f].facenorm.set(mx, my, mz);
 		face[f].facenorm.normalize();
-	}
-}
-
-// To mau cho doi tuong (Lab 5)
-void Mesh::Draw()
-{
-	for (int f = 0; f < numFaces; f++)
-	{
-		glBegin(GL_POLYGON);
-		for (int v = 0; v < face[f].nVerts; v++)
-		{
-			int iv = face[f].vert[v].vertIndex;
-			glNormal3f(face[f].facenorm.x, face[f].facenorm.y, face[f].facenorm.z);
-			glVertex3f(pt[iv].x, pt[iv].y, pt[iv].z);
-		}
-		glEnd();
 	}
 }
 
@@ -504,6 +506,80 @@ void Mesh::CreateCube(float fSize)
 		face[5].vert[i].colorIndex = 5;
 }
 
+// Hinh hop chu nhat
+void Mesh::CreateCuboid(float fSizeX, float fSizeY, float fSizeZ)
+{
+	int i;
+	numVerts = 8;
+	pt = new Point3[numVerts];
+
+	pt[0].set(-fSizeX / 2, -fSizeY / 2, -fSizeZ / 2);
+	pt[1].set(fSizeX / 2, -fSizeY / 2, -fSizeZ / 2);
+	pt[2].set(fSizeX / 2, fSizeY / 2, -fSizeZ / 2);
+	pt[3].set(-fSizeX / 2, fSizeY / 2, -fSizeZ / 2);
+	pt[4].set(-fSizeX / 2, -fSizeY / 2, fSizeZ / 2);
+	pt[5].set(fSizeX / 2, -fSizeY / 2, fSizeZ / 2);
+	pt[6].set(fSizeX / 2, fSizeY / 2, fSizeZ / 2);
+	pt[7].set(-fSizeX / 2, fSizeY / 2, fSizeZ / 2);
+
+	numFaces = 6;
+	face = new Face[numFaces];
+
+	face[0].nVerts = 4;
+	face[0].vert = new VertexID[face[0].nVerts];
+	face[0].vert[0].vertIndex = 0;
+	face[0].vert[1].vertIndex = 4;
+	face[0].vert[2].vertIndex = 7;
+	face[0].vert[3].vertIndex = 3;
+	for (i = 0; i < face[0].nVerts; i++)
+		face[0].vert[i].colorIndex = 0;
+
+	face[1].nVerts = 4;
+	face[1].vert = new VertexID[face[1].nVerts];
+	face[1].vert[0].vertIndex = 3;
+	face[1].vert[1].vertIndex = 7;
+	face[1].vert[2].vertIndex = 6;
+	face[1].vert[3].vertIndex = 2;
+	for (i = 0; i < face[1].nVerts; i++)
+		face[1].vert[i].colorIndex = 1;
+
+	face[2].nVerts = 4;
+	face[2].vert = new VertexID[face[2].nVerts];
+	face[2].vert[0].vertIndex = 1;
+	face[2].vert[1].vertIndex = 2;
+	face[2].vert[2].vertIndex = 6;
+	face[2].vert[3].vertIndex = 5;
+	for (i = 0; i < face[2].nVerts; i++)
+		face[2].vert[i].colorIndex = 2;
+
+	face[3].nVerts = 4;
+	face[3].vert = new VertexID[face[3].nVerts];
+	face[3].vert[0].vertIndex = 0;
+	face[3].vert[1].vertIndex = 1;
+	face[3].vert[2].vertIndex = 5;
+	face[3].vert[3].vertIndex = 4;
+	for (i = 0; i < face[3].nVerts; i++)
+		face[3].vert[i].colorIndex = 3;
+
+	face[4].nVerts = 4;
+	face[4].vert = new VertexID[face[4].nVerts];
+	face[4].vert[0].vertIndex = 6;
+	face[4].vert[1].vertIndex = 7;
+	face[4].vert[2].vertIndex = 4;
+	face[4].vert[3].vertIndex = 5;
+	for (i = 0; i < face[4].nVerts; i++)
+		face[4].vert[i].colorIndex = 4;
+
+	face[5].nVerts = 4;
+	face[5].vert = new VertexID[face[5].nVerts];
+	face[5].vert[0].vertIndex = 2;
+	face[5].vert[1].vertIndex = 1;
+	face[5].vert[2].vertIndex = 0;
+	face[5].vert[3].vertIndex = 3;
+	for (i = 0; i < face[5].nVerts; i++)
+		face[5].vert[i].colorIndex = 5;
+}
+
 // Hinh tu dien
 void Mesh::CreateTetrahedron()
 {
@@ -551,67 +627,226 @@ void Mesh::CreateTetrahedron()
 		face[3].vert[i].colorIndex = 3;
 }
 
+// Hinh hop chu nhat cat goc
+void Mesh::BTCuboid(float fSizeX, float fSizeY, float fSizeZ,float fSizeT)
+{
+	int i;
+	numVerts = 8;
+	pt = new Point3[numVerts];
+
+	pt[0].set(-fSizeX / 2, -fSizeY / 2, -fSizeZ / 2); //0
+	pt[1].set(fSizeX / 2, -fSizeY / 2, -fSizeZ / 2); //1
+	pt[2].set(fSizeX / 2, fSizeY / 2, -fSizeZ / 2); //2
+	pt[3].set(-fSizeX / 2, fSizeY / 2, -fSizeZ / 2); //3
+	pt[4].set(-fSizeX / 2, -fSizeY / 2, fSizeZ / 2); //4
+	pt[5].set(fSizeX / 2, -fSizeY / 2, fSizeZ / 2); //5
+	pt[6].set(fSizeX / 2, fSizeY / 2, fSizeZ / 2); //6
+	pt[7].set(-fSizeX / 2, fSizeY / 2, fSizeZ / 2); //7
+
+	pt[8].set(-fSizeX / 2, -fSizeY / 2, -fSizeZ / 2 + fSizeT); //0
+	pt[9].set(-fSizeX / 2, -fSizeY / 2 + fSizeT, -fSizeZ / 2); //0
+	pt[10].set(fSizeX / 2, -fSizeY / 2, -fSizeZ / 2 + fSizeT); //1
+	pt[11].set(fSizeX / 2, -fSizeY / 2 + fSizeT, -fSizeZ / 2); //1
+
+	pt[12].set(fSizeX / 2, fSizeY / 2 - fSizeT, -fSizeZ / 2); //2
+	pt[13].set(fSizeX / 2, fSizeY / 2, -fSizeZ / 2 + fSizeT); //2
+	pt[14].set(-fSizeX / 2, fSizeY / 2 - fSizeT, -fSizeZ / 2); //3
+	pt[15].set(-fSizeX / 2, fSizeY / 2, -fSizeZ / 2 + fSizeT); //3
+
+	pt[16].set(-fSizeX / 2, -fSizeY / 2 + fSizeT, fSizeZ / 2); //4
+	pt[17].set(-fSizeX / 2, -fSizeY / 2, fSizeZ / 2 - fSizeT); //4
+	pt[18].set(fSizeX / 2, -fSizeY / 2 + fSizeT, fSizeZ / 2); //5
+	pt[19].set(fSizeX / 2, -fSizeY / 2, fSizeZ / 2 - fSizeT); //5
+
+	pt[20].set(fSizeX / 2, fSizeY / 2, fSizeZ / 2 - fSizeT); //6
+	pt[21].set(fSizeX / 2, fSizeY / 2 - fSizeT, fSizeZ / 2); //6
+	pt[22].set(-fSizeX / 2, fSizeY / 2, fSizeZ / 2 - fSizeT); //7
+	pt[23].set(-fSizeX / 2, fSizeY / 2 - fSizeT, fSizeZ / 2); //7
+	numFaces = 6;
+	face = new Face[numFaces];
+
+	face[0].nVerts = 4;
+	face[0].vert = new VertexID[face[0].nVerts];
+	face[0].vert[0].vertIndex = 8;
+	face[0].vert[1].vertIndex = 9;
+	face[0].vert[2].vertIndex = 10;
+	face[0].vert[3].vertIndex = 11;
+	for (i = 0; i < face[0].nVerts; i++)
+		face[0].vert[i].colorIndex = 0;
+
+	face[1].nVerts = 4;
+	face[1].vert = new VertexID[face[1].nVerts];
+	face[1].vert[0].vertIndex = 12;
+	face[1].vert[1].vertIndex = 13;
+	face[1].vert[2].vertIndex = 14;
+	face[1].vert[3].vertIndex = 15;
+	for (i = 0; i < face[1].nVerts; i++)
+		face[1].vert[i].colorIndex = 1;
+
+	face[2].nVerts = 4;
+	face[2].vert = new VertexID[face[2].nVerts];
+	face[2].vert[0].vertIndex = 16;
+	face[2].vert[1].vertIndex = 17;
+	face[2].vert[2].vertIndex = 18;
+	face[2].vert[3].vertIndex = 19;
+	for (i = 0; i < face[2].nVerts; i++)
+		face[2].vert[i].colorIndex = 2;
+
+	face[3].nVerts = 4;
+	face[3].vert = new VertexID[face[3].nVerts];
+	face[3].vert[0].vertIndex = 20;
+	face[3].vert[1].vertIndex = 21;
+	face[3].vert[2].vertIndex = 22;
+	face[3].vert[3].vertIndex = 23;
+	for (i = 0; i < face[3].nVerts; i++)
+		face[3].vert[i].colorIndex = 3;
+
+	face[4].nVerts = 8;
+	face[4].vert = new VertexID[face[4].nVerts];
+	face[4].vert[0].vertIndex = 8;
+	face[4].vert[1].vertIndex = 9;
+	face[4].vert[2].vertIndex = 17;
+	face[4].vert[3].vertIndex = 16;
+	face[4].vert[4].vertIndex = 22;
+	face[4].vert[5].vertIndex = 23;
+	face[4].vert[6].vertIndex = 15;
+	face[4].vert[7].vertIndex = 14;
+	for (i = 0; i < face[4].nVerts; i++)
+		face[4].vert[i].colorIndex = 4;
+
+	face[5].nVerts = 8;
+	face[5].vert = new VertexID[face[5].nVerts];
+	face[5].vert[0].vertIndex = 11;
+	face[5].vert[1].vertIndex = 10;
+	face[5].vert[2].vertIndex = 19;
+	face[5].vert[3].vertIndex = 18;
+	face[5].vert[4].vertIndex = 21;
+	face[5].vert[5].vertIndex = 20;
+	face[5].vert[6].vertIndex = 13;
+	face[5].vert[7].vertIndex = 12;
+	for (i = 0; i < face[5].nVerts; i++)
+		face[5].vert[i].colorIndex = 5;
+}
+void Mesh::CreateCylinder(int N, float base1Height, float base1Radius)
+{
+	/*
+	* N: Số đỉnh trên hình tròn
+	* base1Height: Chiều cao của hình trụ
+	* base1Radius: bán kính của hình tròn
+	*/
+	int i;
+	numVerts = 2 * N + 2;
+	GLfloat angle = 2 * PI / N;
+	pt = new Point3[numVerts];
+	// Vong tron tren: [0, N - 1]
+	for (i = 0; i < N; i++)
+	{
+		pt[i].set(base1Radius * sin((double)i * angle), base1Height / 2, -base1Radius * cos((double)i * angle));
+	}
+	// Vong tron duoi: [N, 2 * N - 1]
+	for (i = 0; i < N; i++)
+	{
+		pt[i + N].set(base1Radius * sin((double)i * angle), -base1Height / 2, -base1Radius * cos((double)i * angle));
+	}
+
+	pt[2 * N].set(0, base1Height / 2, 0);
+	pt[2 * N + 1].set(0, -base1Height / 2, 0);
+
+	numFaces = 3 * N;
+	face = new Face[numFaces];
+
+	for (i = 0; i < numFaces; i++)
+	{
+		if (i < N - 1)
+		{
+			face[i].nVerts = 3;
+			face[i].vert = new VertexID[face[i].nVerts];
+
+			face[i].vert[0].vertIndex = i;
+			face[i].vert[1].vertIndex = i + 1;
+			face[i].vert[2].vertIndex = 2 * N;
+		}
+		else if (i == N - 1)
+		{
+			face[i].nVerts = 3;
+			face[i].vert = new VertexID[face[i].nVerts];
+
+			face[i].vert[0].vertIndex = i;
+			face[i].vert[1].vertIndex = 0;
+			face[i].vert[2].vertIndex = 2 * N;
+		}
+		else if (i < 2 * N - 1)
+		{
+			face[i].nVerts = 3;
+			face[i].vert = new VertexID[face[i].nVerts];
+
+			face[i].vert[0].vertIndex = i;
+			face[i].vert[1].vertIndex = 2 * N + 1;
+			face[i].vert[2].vertIndex = i + 1;
+		}
+		else if (i == 2 * N - 1)
+		{
+			face[i].nVerts = 3;
+			face[i].vert = new VertexID[face[i].nVerts];
+
+			face[i].vert[0].vertIndex = i;
+			face[i].vert[1].vertIndex = 2 * N + 1;
+			face[i].vert[2].vertIndex = N;
+		}
+		else if (i < 3 * N - 1)
+		{
+			face[i].nVerts = 4;
+			face[i].vert = new VertexID[face[i].nVerts];
+
+			face[i].vert[0].vertIndex = i - 2 * N + 1;
+			face[i].vert[1].vertIndex = i - 2 * N;
+			face[i].vert[2].vertIndex = i - N;
+			face[i].vert[3].vertIndex = i - N + 1;
+		}
+		else
+		{
+			face[i].nVerts = 4;
+			face[i].vert = new VertexID[face[i].nVerts];
+
+			face[i].vert[0].vertIndex = 0;
+			face[i].vert[1].vertIndex = N - 1;
+			face[i].vert[2].vertIndex = 2 * N - 1;
+			face[i].vert[3].vertIndex = N;
+		}
+		for (int j = 0; j < face[i].nVerts; j++)
+			face[i].vert[j].colorIndex = i;
+	}
+}
+
 // Tham so
 #pragma region
+// Truc tren
+float trucX = 2;
+float trucY = 0.2;
+float trucZ = 0.2;
+
+// Truc duoi
+float base1Radius = 0.2;
+float base1Height = 0.8;
+//---------------------------------
 // Tham so cua cua so
 int screenWidth = 600;
 int screenHeight = 600;
 
-// Tham so cua vat the
-float base1Radius = 0.8;
-float base1Height = 0.2;
-float base1RotateStep = 5;
-
-float base2Radius = 0.6;
-float base2Height = 1.2;
-
-float cylinderRadius = 0.4;
-float cylinderHeight = 1.6;
-float cylinderRotateStep = 5;
-float cylinderTranslationStep = 0.05;
-float cylinderOffset = base2Height / 2;
+//float base2Radius = 0.6;
+//float base2Height = 1.2;
+//
+//float cylinderRadius = 0.4;
+//float cylinderHeight = 1.6;
+//float cylinderRotateStep = 5;
+//float cylinderTranslationStep = 0.05;
+//float cylinderOffset = base2Height / 2;
 //float	cylinderOffset = base2Height-cylinderHeight/2;
 
-// Bàn đỡ
-float banDoX = 7;
-float banDoY = base1Height;
-float banDoZ = 3.5;
 
-// Đế của giá đỡ
-float deGiaDoX = 0.3;
-float deGiaDoY = 0.05;
-float deGiaDoZ = 0.8;
 
-// Giá đỡ
-float giaDoRong = deGiaDoX;
-float giaDoCao = 0.3;
-float giaDoCaoBanKinhLon = 0.8 / 6;
-float giaDoCaoBanKinhNho = 0.075;
-
-// Rotor
-float rotorCao = 0.18;
-float rotorBanKinh = 0.35 * banDoZ;
-float rotorRotateStep = 5;
-
-// Chốt
-float chotL1 = 2 * (deGiaDoY + giaDoCao - rotorCao);
-float chotL2 = 0.1;
-float chotD1 = 0.2;
-float chotD2 = 0.15;
-
-// Cơ cấu liên kết
-float cclkBanKinhLon = 0.2;
-float cclkBanKinhNho = chotD1 / 2.0;
-float cclkDai = rotorBanKinh;
-float cclkCao = chotL1;
-
-// Thanh trượt
-float ttL1 = 0.25;
-float ttL2 = 0.05;
-float ttL3 = 0.6 * banDoX / 2.0;
-float ttD1 = 1.5 * (deGiaDoY + giaDoCao - rotorCao);
-float ttD2 = giaDoCaoBanKinhNho * 2;
-
+Mesh trucTren;
+Mesh trucDuoi;
 
 double angle = 0;
 
@@ -724,12 +959,60 @@ void drawAxis()
 	glEnd();
 }
 
+void drawTrucTren()
+{
+	glPushMatrix();
+	//glTranslated(0, cylinderHeight + base1Height + cylinderOffset + trucY / 2.0, 0);
 
+	GLfloat diffuse[] = { 0.0, 1.0, 0.0, 1.0 };
+	GLfloat ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat shininess = 40.0;
+	trucTren.setupMaterial(ambient, diffuse, specular, shininess);
+
+	if (bWireFrame)
+	{
+		trucTren.DrawWireframe();
+	}
+	else
+	{
+		trucTren.Draw();
+	}
+
+	glPopMatrix();
+}
+void drawTrucDuoi()
+{
+	glPushMatrix();
+
+	//glTranslated(0, cylinderHeight + base1Height + cylinderOffset + trucY / 2.0, 0);
+	glRotatef(90, 0, 0, 1);
+
+	GLfloat diffuse[] = { 0.0, 1.0, 0.0, 1.0 };
+	GLfloat ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat shininess = 40.0;
+	trucDuoi.setupMaterial(ambient, diffuse, specular, shininess);
+
+
+	if (bWireFrame)
+	{
+		trucDuoi.DrawWireframe();
+	}
+	else
+	{
+		trucDuoi.Draw();
+	}
+
+	glPopMatrix();
+}
 #pragma endregion
 
 void drawAll()
 {
-
+	drawAxis();
+	drawTrucTren();
+	drawTrucDuoi();
 }
 
 void myDisplay()
@@ -816,7 +1099,7 @@ void myInit()
 	camera_dis = 6.5;	// Khoảng cách đến trục Oy
 
 	lookAt_X = 0;
-	lookAt_Y = 1;
+	lookAt_Y = 0;
 	lookAt_Z = 0;
 
 	float fHalfSize = 4;
@@ -858,7 +1141,17 @@ void myInit()
 
 void create(int N)
 {
-	
+	int M = 2 * (N - 1);
+	// Truc tren hinh chu nhat cat goc
+	trucTren.BTCuboid(trucX, trucY, trucZ, trucY/4);
+	trucTren.SetColor(4);
+	trucTren.CalculateFacesNorm();
+
+	//Truc duoi tru
+	trucDuoi.CreateCylinder(M, base1Height, base1Radius);
+	trucDuoi.SetColor(3);
+	trucDuoi.CalculateFacesNorm();
+
 }
 
 void print()
@@ -884,7 +1177,7 @@ int main(int argc, char* argv[])
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);		//set the display mode
 	glutInitWindowSize(screenWidth, screenHeight);					//set window size
 	glutInitWindowPosition(100, 100);								// set window position on screen
-	glutCreateWindow("Assignment - Nguyen Xuan Hien (1652192)");	// open the screen window
+	glutCreateWindow("Assignment - Dang Tuan Anh (1811400)");	// open the screen window
 
 	print();
 
