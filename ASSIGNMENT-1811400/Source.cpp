@@ -1,6 +1,6 @@
 ﻿/*
 * 	Bai tap lon Do Hoa May Tinh
-*	So dinh tren hinh tron: 
+*	So dinh tren hinh tron: 36
 *	Ten: 	Dang Tuan Anh
 * 	MSSV:	1811400
 * 	Lop:	L01
@@ -311,7 +311,7 @@ public:
 	void CreateCuboid(float fSizeX, float fSizeY, float fSizeZ);
 	void CreateCylinder(int N, float base1Height, float base1Radius);
 
-	void BTCuboid(float fSizeX, float fSizeY, float fSizeZ, float fCutSizeT);
+	void BTCuboid(float fSizeX, float fSizeY, float fSizeZ);
 	// Lab 5
 	void CalculateFacesNorm();
 	void Draw();
@@ -628,10 +628,11 @@ void Mesh::CreateTetrahedron()
 }
 
 // Hinh hop chu nhat cat goc
-void Mesh::BTCuboid(float fSizeX, float fSizeY, float fSizeZ,float fSizeT)
+void Mesh::BTCuboid(float fSizeX, float fSizeY, float fSizeZ)
 {
+	float fSizeT = fSizeY/4.0;
 	int i;
-	numVerts = 8;
+	numVerts = 24;
 	pt = new Point3[numVerts];
 
 	pt[0].set(-fSizeX / 2, -fSizeY / 2, -fSizeZ / 2); //0
@@ -662,15 +663,15 @@ void Mesh::BTCuboid(float fSizeX, float fSizeY, float fSizeZ,float fSizeT)
 	pt[21].set(fSizeX / 2, fSizeY / 2 - fSizeT, fSizeZ / 2); //6
 	pt[22].set(-fSizeX / 2, fSizeY / 2, fSizeZ / 2 - fSizeT); //7
 	pt[23].set(-fSizeX / 2, fSizeY / 2 - fSizeT, fSizeZ / 2); //7
-	numFaces = 6;
+	numFaces = 10;
 	face = new Face[numFaces];
 
 	face[0].nVerts = 4;
 	face[0].vert = new VertexID[face[0].nVerts];
 	face[0].vert[0].vertIndex = 8;
 	face[0].vert[1].vertIndex = 9;
-	face[0].vert[2].vertIndex = 10;
-	face[0].vert[3].vertIndex = 11;
+	face[0].vert[2].vertIndex = 11;
+	face[0].vert[3].vertIndex = 10;
 	for (i = 0; i < face[0].nVerts; i++)
 		face[0].vert[i].colorIndex = 0;
 
@@ -678,8 +679,8 @@ void Mesh::BTCuboid(float fSizeX, float fSizeY, float fSizeZ,float fSizeT)
 	face[1].vert = new VertexID[face[1].nVerts];
 	face[1].vert[0].vertIndex = 12;
 	face[1].vert[1].vertIndex = 13;
-	face[1].vert[2].vertIndex = 14;
-	face[1].vert[3].vertIndex = 15;
+	face[1].vert[2].vertIndex = 15;
+	face[1].vert[3].vertIndex = 14;
 	for (i = 0; i < face[1].nVerts; i++)
 		face[1].vert[i].colorIndex = 1;
 
@@ -687,8 +688,8 @@ void Mesh::BTCuboid(float fSizeX, float fSizeY, float fSizeZ,float fSizeT)
 	face[2].vert = new VertexID[face[2].nVerts];
 	face[2].vert[0].vertIndex = 16;
 	face[2].vert[1].vertIndex = 17;
-	face[2].vert[2].vertIndex = 18;
-	face[2].vert[3].vertIndex = 19;
+	face[2].vert[2].vertIndex = 19;
+	face[2].vert[3].vertIndex = 18;
 	for (i = 0; i < face[2].nVerts; i++)
 		face[2].vert[i].colorIndex = 2;
 
@@ -696,36 +697,72 @@ void Mesh::BTCuboid(float fSizeX, float fSizeY, float fSizeZ,float fSizeT)
 	face[3].vert = new VertexID[face[3].nVerts];
 	face[3].vert[0].vertIndex = 20;
 	face[3].vert[1].vertIndex = 21;
-	face[3].vert[2].vertIndex = 22;
-	face[3].vert[3].vertIndex = 23;
+	face[3].vert[2].vertIndex = 23;
+	face[3].vert[3].vertIndex = 22;
 	for (i = 0; i < face[3].nVerts; i++)
 		face[3].vert[i].colorIndex = 3;
 
-	face[4].nVerts = 8;
+	face[4].nVerts = 4;
 	face[4].vert = new VertexID[face[4].nVerts];
-	face[4].vert[0].vertIndex = 8;
-	face[4].vert[1].vertIndex = 9;
-	face[4].vert[2].vertIndex = 17;
-	face[4].vert[3].vertIndex = 16;
-	face[4].vert[4].vertIndex = 22;
-	face[4].vert[5].vertIndex = 23;
-	face[4].vert[6].vertIndex = 15;
-	face[4].vert[7].vertIndex = 14;
+	face[4].vert[0].vertIndex = 9;
+	face[4].vert[1].vertIndex = 14;
+	face[4].vert[2].vertIndex = 12;
+	face[4].vert[3].vertIndex = 11;
 	for (i = 0; i < face[4].nVerts; i++)
-		face[4].vert[i].colorIndex = 4;
+		face[4].vert[i].colorIndex = 3;
 
-	face[5].nVerts = 8;
+	face[5].nVerts = 4;
 	face[5].vert = new VertexID[face[5].nVerts];
-	face[5].vert[0].vertIndex = 11;
-	face[5].vert[1].vertIndex = 10;
+	face[5].vert[0].vertIndex = 8;
+	face[5].vert[1].vertIndex = 17;
 	face[5].vert[2].vertIndex = 19;
-	face[5].vert[3].vertIndex = 18;
-	face[5].vert[4].vertIndex = 21;
-	face[5].vert[5].vertIndex = 20;
-	face[5].vert[6].vertIndex = 13;
-	face[5].vert[7].vertIndex = 12;
+	face[5].vert[3].vertIndex = 10;
 	for (i = 0; i < face[5].nVerts; i++)
-		face[5].vert[i].colorIndex = 5;
+		face[5].vert[i].colorIndex = 3;
+
+	face[6].nVerts = 4;
+	face[6].vert = new VertexID[face[6].nVerts];
+	face[6].vert[0].vertIndex = 16;
+	face[6].vert[1].vertIndex = 23;
+	face[6].vert[2].vertIndex = 21;
+	face[6].vert[3].vertIndex = 18;
+	for (i = 0; i < face[6].nVerts; i++)
+		face[6].vert[i].colorIndex = 3;
+
+	face[7].nVerts = 4;
+	face[7].vert = new VertexID[face[7].nVerts];
+	face[7].vert[0].vertIndex = 22;
+	face[7].vert[1].vertIndex = 15;
+	face[7].vert[2].vertIndex = 13;
+	face[7].vert[3].vertIndex = 20;
+	for (i = 0; i < face[7].nVerts; i++)
+		face[7].vert[i].colorIndex = 3;
+
+	face[8].nVerts = 8;
+	face[8].vert = new VertexID[face[8].nVerts];
+	face[8].vert[0].vertIndex = 9;
+	face[8].vert[1].vertIndex = 8;
+	face[8].vert[2].vertIndex = 17;
+	face[8].vert[3].vertIndex = 16;
+	face[8].vert[4].vertIndex = 23;
+	face[8].vert[5].vertIndex = 22;
+	face[8].vert[6].vertIndex = 15;
+	face[8].vert[7].vertIndex = 14;
+	for (i = 0; i < face[4].nVerts; i++)
+		face[4].vert[i].colorIndex = 3;
+
+	face[9].nVerts = 8;
+	face[9].vert = new VertexID[face[9].nVerts];
+	face[9].vert[0].vertIndex = 11;
+	face[9].vert[1].vertIndex = 10;
+	face[9].vert[2].vertIndex = 19;
+	face[9].vert[3].vertIndex = 18;
+	face[9].vert[4].vertIndex = 21;
+	face[9].vert[5].vertIndex = 20;
+	face[9].vert[6].vertIndex = 13;
+	face[9].vert[7].vertIndex = 12;
+	for (i = 0; i < face[5].nVerts; i++)
+		face[5].vert[i].colorIndex = 3;
 }
 void Mesh::CreateCylinder(int N, float base1Height, float base1Radius)
 {
@@ -1143,13 +1180,13 @@ void create(int N)
 {
 	int M = 2 * (N - 1);
 	// Truc tren hinh chu nhat cat goc
-	trucTren.BTCuboid(trucX, trucY, trucZ, trucY/4);
-	trucTren.SetColor(4);
+	trucTren.BTCuboid(trucX, trucY, trucZ);
+	trucTren.SetColor(1);
 	trucTren.CalculateFacesNorm();
 
 	//Truc duoi tru
 	trucDuoi.CreateCylinder(M, base1Height, base1Radius);
-	trucDuoi.SetColor(3);
+	trucDuoi.SetColor(1);
 	trucDuoi.CalculateFacesNorm();
 
 }
